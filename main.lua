@@ -9,3 +9,7 @@ end})
 table.insert(packages.pacman, {name="rustup",post_install_hook=function()
   os.execute("rustup default stable || exit 1")
 end})
+
+
+--paru
+table.insert(packages.paru, "fastfetch")

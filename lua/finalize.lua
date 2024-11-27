@@ -131,6 +131,13 @@ execute_hooks(packages.pacman,d.add_prog,'post_remove_hook')
 local new_pacman_list = compact(packages.pacman)
 --print(inspect(new_pacman_list))
 
+--this is todo, always install
+if contents.paru_from_github == nil then
+    os.execute("sudo pacman -S --needed base-devel")
+    os.execute("git clone https://aur.archlinux.org/paru.git state/paru")
+    os.execute("makepkg -si -D state/paru")
+end
 
-local new_json = {pacman=new_pacman_list}
+--
+local new_json = {pacman=new_pacman_list,paru_from_github={"paru"}}
 write(file,luajson.encode(new_json))
