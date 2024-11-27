@@ -17,7 +17,8 @@ packages.pacman = {}
 managers.paru = Managers('paru','paru -S','paru -Rns',true)
 packages.paru = {}
 --
-managers.flatpak = Managers('flatpak','flatpak install','flatpak uninstall -Rns',true)
+-- flatpak upgrade
+managers.flatpak = Managers('flatpak','flatpak install','flatpak uninstall',true)
 packages.flatpak = {}
 -- todo: fix-this
 -- just custom loader, rememeber this exists

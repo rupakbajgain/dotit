@@ -137,7 +137,26 @@ if contents.paru_from_github == nil then
     os.execute("git clone https://aur.archlinux.org/paru.git state/paru")
     os.execute("makepkg -si -D state/paru")
 end
-
 --
-local new_json = {pacman=new_pacman_list,paru_from_github={"paru"}}
+if contents.paru == nil then contents.paru = { } end
+local d = diff(contents.paru, packages.paru)
+execute_hooks(packages.paru,d.add_prog,'pre_install_hook')
+managers.paru:add_progs(d.add_prog)
+execute_hooks(packages.paru,d.add_prog,'post_install_hook')
+execute_hooks(packages.paru,d.add_prog,'pre_remove_hook')
+managers.paru:remove_progs(d.rem_prog)
+execute_hooks(packages.paru,d.add_prog,'post_remove_hook')
+local new_paru_list = compact(packages.paru)
+--
+if contents.flatpak == nil then contents.flatpak = { } end
+local d = diff(contents.flatpak, packages.flatpak)
+execute_hooks(packages.flatpak,d.add_prog,'pre_install_hook')
+managers.flatpak:add_progs(d.add_prog)
+execute_hooks(packages.flatpak,d.add_prog,'post_install_hook')
+execute_hooks(packages.flatpak,d.add_prog,'pre_remove_hook')
+managers.flatpak:remove_progs(d.rem_prog)
+execute_hooks(packages.flatpak,d.add_prog,'post_remove_hook')
+local new_flatpak_list = compact(packages.flatpak)
+--
+local new_json = {pacman=new_pacman_list,paru_from_github={"paru"},paru=new_paru_list,flatpak=new_flatpak_list}
 write(file,luajson.encode(new_json))

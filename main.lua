@@ -13,3 +13,6 @@ end})
 
 --paru
 table.insert(packages.paru, "fastfetch")
+
+--flatpak
+table.insert(packages.flatpak, "com.github.tchx84.Flatseal")
