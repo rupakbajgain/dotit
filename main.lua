@@ -1,5 +1,4 @@
 print("Defining System Packages")
-packages.pacman[1] = "firefox"
-packages.pacman[2] = "cmake"
-packages.pacman[3] = "git"
-print(packages)
+table.insert(packages.pacman, "firefox")
+table.insert(packages.pacman, "cmake")
+table.insert(packages.pacman, "git")

@@ -3,7 +3,7 @@
 int main(int argc, char* argv[]) {
   sol::state lua;
 
-  lua.open_libraries(sol::lib::base);
+  lua.open_libraries();
 
   lua.script_file("lua/init.lua");
   lua.script_file("main.lua");
