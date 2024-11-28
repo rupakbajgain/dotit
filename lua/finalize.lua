@@ -75,7 +75,7 @@ function diff(table1, tab2)
         if type(i) == "string" then
             table.insert(table2, i)
         else
-            print(i)
+            --print(i)
             table.insert(table2, i.name)
         end
     end
@@ -108,6 +108,7 @@ function execute_hooks(fulltable,deltable,op)
         ::continue::
     end
 end
+
 --
 -----------------------------
 --
@@ -121,6 +122,8 @@ if file_exists(file) then
 end
 --
 
+local changes_made = false
+--
 if contents.pacman == nil then contents.pacman = { } end
 local d = diff(contents.pacman, packages.pacman)
 execute_hooks(packages.pacman,d.add_prog,'pre_install_hook')
@@ -129,6 +132,7 @@ execute_hooks(packages.pacman,d.add_prog,'post_install_hook')
 execute_hooks(packages.pacman,d.add_prog,'pre_remove_hook')
 managers.pacman:remove_progs(d.rem_prog)
 execute_hooks(packages.pacman,d.add_prog,'post_remove_hook')
+if #d.add_prog>0 or #d.rem_prog>0 then changes_made = true end
 local new_pacman_list = compact(packages.pacman)
 --print(inspect(new_pacman_list))
 
@@ -137,6 +141,7 @@ if contents.paru_from_github==nil and services.paru.enable==true then
     os.execute("sudo pacman -S --needed base-devel")
     os.execute("git clone https://aur.archlinux.org/paru.git state/paru")
     os.execute("makepkg -si -D state/paru")
+    changes_made = true
 end
 --
 if contents.paru == nil then contents.paru = { } end
@@ -147,6 +152,7 @@ execute_hooks(packages.paru,d.add_prog,'post_install_hook')
 execute_hooks(packages.paru,d.add_prog,'pre_remove_hook')
 managers.paru:remove_progs(d.rem_prog)
 execute_hooks(packages.paru,d.add_prog,'post_remove_hook')
+if #d.add_prog>0 or #d.rem_prog>0 then changes_made = true end
 local new_paru_list = compact(packages.paru)
 --
 if contents.flatpak == nil then contents.flatpak = { } end
@@ -157,7 +163,12 @@ execute_hooks(packages.flatpak,d.add_prog,'post_install_hook')
 execute_hooks(packages.flatpak,d.add_prog,'pre_remove_hook')
 managers.flatpak:remove_progs(d.rem_prog)
 execute_hooks(packages.flatpak,d.add_prog,'post_remove_hook')
+if #d.add_prog>0 or #d.rem_prog>0 then changes_made = true end
 local new_flatpak_list = compact(packages.flatpak)
 --
+if changes_made then
 local new_json = {pacman=new_pacman_list,paru_from_github={"paru"},paru=new_paru_list,flatpak=new_flatpak_list}
 write(file,luajson.encode(new_json))
+else
+print "Nothing to do.."
+end
