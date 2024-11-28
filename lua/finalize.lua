@@ -75,6 +75,7 @@ function diff(table1, tab2)
         if type(i) == "string" then
             table.insert(table2, i)
         else
+            print(i)
             table.insert(table2, i.name)
         end
     end
@@ -132,7 +133,7 @@ local new_pacman_list = compact(packages.pacman)
 --print(inspect(new_pacman_list))
 
 --this is todo, always install
-if contents.paru_from_github == nil then
+if contents.paru_from_github==nil and services.paru.enable==true then
     os.execute("sudo pacman -S --needed base-devel")
     os.execute("git clone https://aur.archlinux.org/paru.git state/paru")
     os.execute("makepkg -si -D state/paru")

@@ -1,6 +1,6 @@
 packages = {}
 managers = {}
-
+services = {}
 --services = {}
 --services.paru = {}
 --services.paru.enable = false
