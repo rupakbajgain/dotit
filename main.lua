@@ -23,6 +23,7 @@ table.insert(packages.paru, {name="nbfc-linux", post_install_hook=function()
    os.execute("sudo nbfc start")
 end})
 table.insert(packages.systemctl_startup, "nbfc_service")
+-- need to add nbfc-qt (later..)
 
 --flatpak
 table.insert(packages.flatpak, "com.github.tchx84.Flatseal")
