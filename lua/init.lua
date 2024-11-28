@@ -25,3 +25,7 @@ packages.flatpak = {}
 -- later maybe move to git manager, for autoupdates
 managers.paru_from_github = true
 packages.paru_from_github = {'paru'}
+
+-- systemctl enable
+managers.systemctl_startup = Managers('systemctl (reboot)','sudo systemctl enable','sudo systemctl disable',false)
+packages.systemctl_startup = {}

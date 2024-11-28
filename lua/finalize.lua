@@ -136,6 +136,17 @@ if #d.add_prog>0 or #d.rem_prog>0 then changes_made = true end
 local new_pacman_list = compact(packages.pacman)
 --print(inspect(new_pacman_list))
 
+if contents.systemctl_startup == nil then contents.systemctl_startup = { } end
+local d = diff(contents.systemctl_startup, packages.systemctl_startup)
+execute_hooks(packages.systemctl_startup,d.add_prog,'pre_install_hook')
+managers.systemctl_startup:add_progs(d.add_prog)
+execute_hooks(packages.systemctl_startup,d.add_prog,'post_install_hook')
+execute_hooks(packages.systemctl_startup,d.add_prog,'pre_remove_hook')
+managers.systemctl_startup:remove_progs(d.rem_prog)
+execute_hooks(packages.systemctl_startup,d.add_prog,'post_remove_hook')
+if #d.add_prog>0 or #d.rem_prog>0 then changes_made = true end
+local new_systemctl_startup_list = compact(packages.systemctl_startup)
+
 --this is todo, always install
 if contents.paru_from_github==nil and services.paru.enable==true then
     os.execute("sudo pacman -S --needed base-devel")
@@ -167,8 +178,8 @@ if #d.add_prog>0 or #d.rem_prog>0 then changes_made = true end
 local new_flatpak_list = compact(packages.flatpak)
 --
 if changes_made then
-local new_json = {pacman=new_pacman_list,paru_from_github={"paru"},paru=new_paru_list,flatpak=new_flatpak_list}
-write(file,luajson.encode(new_json))
+    local new_json = {pacman=new_pacman_list,paru_from_github={"paru"},paru=new_paru_list,flatpak=new_flatpak_list,systemctl_startup=new_systemctl_startup_list}
+    write(file,luajson.encode(new_json))
 else
-print "Nothing to do.."
+    print "Nothing to do.."
 end
