@@ -15,6 +15,8 @@ services.paru = {enable = true}
 --paru
 table.insert(packages.paru, "fastfetch")
 table.insert(packages.paru, "less")
+table.insert(packages.paru, "discord-canary")
 
 --flatpak
 table.insert(packages.flatpak, "com.github.tchx84.Flatseal")
+table.insert(packages.flatpak, "net.lutris.Lutris")
